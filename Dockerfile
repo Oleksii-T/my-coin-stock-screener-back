@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 3001
 
 # Command to run the app
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
