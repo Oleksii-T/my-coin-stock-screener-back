@@ -1,0 +1,25 @@
+{
+  // config for PHP\Laravel
+  // required: https://marketplace.visualstudio.com/items?itemName=open-southeners.laravel-pint
+  // P.S. see pint.json
+  "[php]": {
+    "editor.defaultFormatter": "open-southeners.laravel-pint",
+    "editor.formatOnSave": true,
+  },
+
+  // config for JS/TS/Vue
+  // required: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+  // P.S. see .prettierrc.json
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  }, 
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  }
+}
