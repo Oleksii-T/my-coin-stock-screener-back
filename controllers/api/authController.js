@@ -1,10 +1,7 @@
-exports.login = (req, res) => {
-  const { username, password } = req.body;
+const { dd } = require("@r/helpers");
+const { matchedData } = require("express-validator");
 
-  // Add your web authentication logic here
-  if (username === "admin" && password === "password") {
-    res.send("Login successful");
-  } else {
-    res.status(401).send("Invalid credentials");
-  }
+exports.login = (req, res) => {
+  const data = matchedData(req);
+  dd(res, { data });
 };

@@ -14,4 +14,13 @@ module.exports = {
   capitalize: (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   },
+
+  dd: (res, data) => {
+    console.log(data);
+    if (res) {
+      res.status(500).json(data);
+      res.end();
+    }
+    process.exit();
+  },
 };

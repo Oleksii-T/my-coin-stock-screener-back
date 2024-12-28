@@ -1,3 +1,4 @@
+require("module-alias/register");
 require("dotenv").config();
 var createError = require("http-errors");
 var express = require("express");
@@ -37,16 +38,22 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+  const isApiRequest = req.get("Accept") === "application/json";
 
-  // render the error page
-  res.status(err.status || 500);
-  res.locals.layout = "layouts/landing";
-  res.locals.title = "Server Error";
+  if (isApiRequest) {
+    res.status(err.status || 500).json({
+      message: err.message || "Internal Server Error",
+      error: req.app.get("env") === "development" ? err : {},
+    });
+  } else {
+    res.status(err.status || 500);
+    res.locals.message = err.message;
+    res.locals.error = req.app.get("env") === "development" ? err : {};
+    res.locals.layout = "layouts/landing";
+    res.locals.title = "Server Error";
 
-  res.render("error");
+    res.render("error");
+  }
 });
 
 // export app instance
