@@ -6,18 +6,18 @@ var logger = require("morgan");
 const expressLayouts = require("express-ejs-layouts");
 var app = express();
 
-// view engine setup
+// packages\extensions config
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "layouts/admin");
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// routes config
 app.use("/", require("./routes/index"));
 app.use("/admin/users", require("./routes/admin/users"));
 app.use("/admin/auth", require("./routes/admin/auth"));
@@ -39,8 +39,10 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+// export app instance
 module.exports = app;
 
+// listem for incomming requests
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
