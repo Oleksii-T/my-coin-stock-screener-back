@@ -3,10 +3,21 @@
   <head>
     <title><%= title %></title>
     <link rel="stylesheet" href="/stylesheets/build/tailwind.min.css">
+    <% if (typeof css !== 'undefined') { %>
+      <% css.forEach(function(cssPath){ %>
+        <link rel="stylesheet" href="<%= cssPath %>">
+      <% }); %>
+    <% } %>
   </head>
   <body class="flex flex-col min-h-screen bg-gray-100">
     <main class="flex-grow container mx-auto px-6 py-8">
       <%- body %>
     </main>
+
+    <% if (typeof js !== 'undefined') { %>
+      <% js.forEach(function(jsPath){ %>
+        <script src="<%= jsPath %>"></script>
+      <% }); %>
+    <% } %>
   </body>
 </html>
