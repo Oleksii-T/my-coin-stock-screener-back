@@ -1,10 +1,18 @@
+require("dotenv").config();
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const expressLayouts = require("express-ejs-layouts");
+const helpers = require("./helpers");
 var app = express();
+
+// add global helpers to ejs
+app.use((req, res, next) => {
+  res.locals.helpers = helpers;
+  next();
+});
 
 // packages\extensions config
 app.set("views", path.join(__dirname, "views"));
@@ -19,9 +27,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // routes config
 app.use("/", require("./routes/index"));
-app.use("/admin/users", require("./routes/admin/users"));
-app.use("/admin/auth", require("./routes/admin/auth"));
-app.use("/api/auth", require("./routes/api/auth"));
+app.use("/admin", require("./routes/admin"));
+app.use("/api", require("./routes/api"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -36,6 +43,9 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+  res.locals.layout = "layouts/landing";
+  res.locals.title = "Server Error";
+
   res.render("error");
 });
 
