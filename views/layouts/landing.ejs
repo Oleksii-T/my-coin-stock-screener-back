@@ -5,6 +5,10 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
-    <%- body %>
+    <%- include('landing/partials/header') %>
+    <main class="flex-grow container mx-auto px-6 py-8">
+      <%- body %>
+    </main>
+    <%- include('landing/partials/footer') %>
   </body>
 </html>
