@@ -28,13 +28,14 @@ module.exports = {
   ],
 
   registerValidationRules: () => [
+    body('firstName').notEmpty().withMessage('First Name is required').escape(),
+    body('lastName').notEmpty().withMessage('Last Name is required').escape(),
     body('email')
       .isEmail()
       .withMessage('Enter a valid email')
       .custom((value, { req }) => isUnique(value, 'email', 'users'))
       .escape(),
     body('password').notEmpty().withMessage('Password is required').escape(),
-    body('name').notEmpty().withMessage('Name is required').escape(),
     body('password_confirmation')
       .notEmpty()
       .withMessage('Password Confirmation is required')

@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
 const express = require('express');
-const helpers = require('@r/helpers');
+const helpers = require('@r/utils/helpers');
 
 module.exports = app => {
   app.use(helmet());
@@ -12,7 +12,7 @@ module.exports = app => {
   app.set('view engine', 'ejs');
   app.use(expressLayouts);
   app.set('layout', 'layouts/admin');
-  app.use(logger('dev'));
+  // app.use(logger('dev'));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());

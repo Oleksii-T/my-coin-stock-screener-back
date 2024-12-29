@@ -1,6 +1,9 @@
-const { dd } = require('@r/helpers');
+const { dd, jsonErrorResponse, jsonSuccessResponse, report } = require('@r/utils/helpers');
 const { matchedData } = require('express-validator');
 const sequelize = require('@r/config/database');
+// const User = require('@r/models/User.js');
+const bcrypt = require('bcrypt');
+const logger = require('@r/utils/logger');
 
 exports.login = (req, res) => {
   const data = matchedData(req);
@@ -9,13 +12,20 @@ exports.login = (req, res) => {
 
 exports.register = async (req, res) => {
   const data = matchedData(req);
+  logger.info(`start register endpoint`);
 
   try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const user = await User.create({
+      firstName: data.firstName,
+      lastName: data.firstName,
+      email: data.email,
+      password: hashedPassword,
+    });
 
-  dd(res, { data });
+    jsonSuccessResponse(res, 'User created successfully', { user });
+  } catch (error) {
+    report(error);
+    jsonErrorResponse(res, 'Can not create user');
+  }
 };
