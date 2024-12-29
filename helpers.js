@@ -17,10 +17,7 @@ module.exports = {
 
   dd: (res, data) => {
     console.log(data);
-    if (res) {
-      res.status(500).json(data);
-      res.end();
-    }
-    process.exit();
+    res.status(500).json(data);
+    res.end();
   },
 };

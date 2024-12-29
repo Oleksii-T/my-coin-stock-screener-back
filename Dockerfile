@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:22
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 3001
 
 # Command to run the app
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "watch:express"]
