@@ -1,10 +1,6 @@
 const { body } = require('express-validator');
 // const User = require('@r/models/User'); // Mongoose User model
 
-const readable = field => {
-  return field;
-};
-
 const isSame = (value, agains, msg) => {
   if (value !== agains) {
     throw new Error(msg);
@@ -14,6 +10,8 @@ const isSame = (value, agains, msg) => {
 };
 
 const isUnique = async (value, field, model) => {
+  return true;
+
   const exists = await model.findOne({ [field]: value });
 
   if (exists) {
