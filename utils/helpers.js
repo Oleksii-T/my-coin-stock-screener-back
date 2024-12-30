@@ -67,10 +67,10 @@ module.exports = {
   },
 
   authUser: async req => {
-    if (!req.auth) {
-      throw new Error('No authenticated user found');
+    if (!req.session.user) {
+      return null;
     }
 
-    return await User.findOne({ where: { id: req.auth.id } });
+    return await User.findOne({ where: { id: req.session.user.id } });
   },
 };
