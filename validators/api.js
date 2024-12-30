@@ -1,5 +1,5 @@
 const { body } = require('express-validator');
-// const User = require('@r/models/User'); // Mongoose User model
+const User = require('@r/models/User.js');
 
 const isSame = (value, agains, msg) => {
   if (value !== agains) {
@@ -10,9 +10,11 @@ const isSame = (value, agains, msg) => {
 };
 
 const isUnique = async (value, field, model) => {
-  return true;
-
-  const exists = await model.findOne({ [field]: value });
+  const exists = await model.findOne({
+    where: {
+      [field]: value,
+    },
+  });
 
   if (exists) {
     throw new Error(`${field} must be unique`);
@@ -33,7 +35,7 @@ module.exports = {
     body('email')
       .isEmail()
       .withMessage('Enter a valid email')
-      .custom((value, { req }) => isUnique(value, 'email', 'users'))
+      .custom((value, { req }) => isUnique(value, 'email', User))
       .escape(),
     body('password').notEmpty().withMessage('Password is required').escape(),
     body('password_confirmation')

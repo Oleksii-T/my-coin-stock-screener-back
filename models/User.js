@@ -14,21 +14,21 @@ const User = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false, // Column is required
-      unique: true, // Ensure unique emails
+      allowNull: false,
+      unique: true,
       validate: {
-        isEmail: true, // Validate that the input is a valid email
+        isEmail: true,
       },
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false, // Column is required
+      allowNull: false,
     },
   },
   {
-    // tableName: 'users', // default
+    tableName: 'users',
     timestamps: true,
   }
 );
 
-module.exports = { User };
+module.exports = User;

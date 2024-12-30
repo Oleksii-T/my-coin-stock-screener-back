@@ -9,7 +9,6 @@ module.exports = app => {
 
   // Error handler
   app.use((err, req, res, next) => {
-    logger.error(err);
     const isApiRequest = req.get('Accept') === 'application/json';
     const isDev = req.app.get('env') === 'development';
     const errMessage = err.message || 'Internal Server Error';

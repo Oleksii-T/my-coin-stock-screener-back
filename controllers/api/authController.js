@@ -1,31 +1,48 @@
-const { dd, jsonErrorResponse, jsonSuccessResponse, report } = require('@r/utils/helpers');
+const { dd, jsonError, jsonSuccess, report } = require('@r/utils/helpers');
 const { matchedData } = require('express-validator');
-const sequelize = require('@r/config/database');
-// const User = require('@r/models/User.js');
+const User = require('@r/models/User.js');
 const bcrypt = require('bcrypt');
-const logger = require('@r/utils/logger');
+const jwt = require('jsonwebtoken');
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
   const data = matchedData(req);
-  dd(res, { data });
+
+  const user = await User.findOne({ where: { email: data.email } });
+
+  if (!user) {
+    return jsonError(res, 'Invalid email or password', 401);
+  }
+
+  const isMatch = await bcrypt.compare(data.password, user.password);
+
+  if (!isMatch) {
+    return jsonError(res, 'Invalid email or password', 401);
+  }
+
+  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  return jsonSuccess(res, 'Logged in successfully', { token });
 };
 
 exports.register = async (req, res) => {
   const data = matchedData(req);
-  logger.info(`start register endpoint`);
+  var user;
 
   try {
     const hashedPassword = await bcrypt.hash(data.password, 10);
-    const user = await User.create({
+    user = await User.create({
       firstName: data.firstName,
-      lastName: data.firstName,
+      lastName: data.lastName,
       email: data.email,
       password: hashedPassword,
     });
-
-    jsonSuccessResponse(res, 'User created successfully', { user });
   } catch (error) {
     report(error);
-    jsonErrorResponse(res, 'Can not create user');
+
+    return jsonError(res, 'Can not create user');
   }
+
+  return jsonSuccess(res, 'Registered successfully!', { user });
 };
