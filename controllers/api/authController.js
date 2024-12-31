@@ -18,9 +18,21 @@ async function sendVerifyEmailCode(user) {
   });
 }
 
+async function sendPasswordResetCode(user) {
+  const key = `password_reset_code:${user.id}`;
+  const code = process.env.NODE_ENV == 'development' ? '000000' : generateRandomString(6);
+  await redisClient.setEx(key, 60 * 10, code);
+
+  await sendMail({
+    to: user.email,
+    subject: 'Password Reset Code',
+    template: 'passwordResetCode.ejs',
+    data: { user, code },
+  });
+}
+
 exports.login = async (req, res) => {
   const data = matchedData(req);
-
   const user = await User.findOne({ where: { email: data.email } });
 
   if (!user) {
@@ -39,7 +51,49 @@ exports.login = async (req, res) => {
 
   req.session.user = { id: user.id };
 
-  return jsonSuccess(res, 'Logged in successfully');
+  return jsonSuccess(res, 'Welcome back!');
+};
+
+exports.logout = async (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      report(err);
+      return jsonError(res, 'Failed to log out. Please try again.', 500);
+    }
+
+    res.clearCookie('connect.sid');
+
+    return jsonSuccess(res, 'Logged out successfully');
+  });
+};
+
+exports.forgetPassword = async (req, res) => {
+  const data = matchedData(req);
+  const user = await User.findOne({ where: { email: data.email } });
+
+  if (user) {
+    await sendPasswordResetCode(user);
+  }
+
+  return jsonSuccess(res, 'If an account with that email exists, you will receive a password reset email shortly.');
+};
+
+exports.resetPassword = async (req, res) => {
+  const data = matchedData(req);
+  const user = await User.findOne({ where: { email: data.email } });
+  const key = `password_reset_code:${user.id}`;
+  const storedCode = await redisClient.get(key);
+  await redisClient.setEx(key, 1, '');
+
+  if (!storedCode || storedCode != data.code) {
+    return jsonError(res, '', { code: 'Invalid code' }, 422);
+  }
+
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+  user.password = hashedPassword;
+  await user.save();
+
+  return jsonSuccess(res, 'Password reset successfully');
 };
 
 exports.verifyEmail = async (req, res) => {
