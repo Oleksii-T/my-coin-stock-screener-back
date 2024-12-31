@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            text-align: center;
+            background-color: rgb(37, 99, 235);
+            padding: 20px;
+        }
+        .header img {
+            max-width: 40px;
+        }
+        .card {
+            padding: 20px;
+            text-align: center;
+        }
+        .card h2 {
+            color: #333333;
+            margin-bottom: 15px;
+        }
+        .card p {
+            color: #666666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .card a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: rgb(37, 99, 235);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .card a:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #666666;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <img src="<%= logoUrl %>" alt="App Logo">
+        </div>
+
+        <div class="card">
+            <h2>Hello, <%= user.name %></h2>
+            <p>Here is a email verification email</p>
+            <h3><%= code %></h3>
+            <!-- <a href="/">
+                Verify
+            </a> -->
+        </div>
+
+        <div class="footer">
+            <p>With best regards, MCSS team.</p>
+        </div>
+    </div>
+</body>
+</html>

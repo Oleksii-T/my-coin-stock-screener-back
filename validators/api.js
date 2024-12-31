@@ -23,25 +23,25 @@ const isUnique = async (value, field, model) => {
   return true;
 };
 
-module.exports = {
-  loginValidationRules: () => [
-    body('email').isEmail().withMessage('Enter a valid email').escape(),
-    body('password').notEmpty().withMessage('Password is required').escape(),
-  ],
+module.exports.login = () => [
+  body('email').isEmail().withMessage('Enter a valid email').escape(),
+  body('password').notEmpty().withMessage('Password is required').escape(),
+];
 
-  registerValidationRules: () => [
-    body('firstName').notEmpty().withMessage('First Name is required').escape(),
-    body('lastName').notEmpty().withMessage('Last Name is required').escape(),
-    body('email')
-      .isEmail()
-      .withMessage('Enter a valid email')
-      .custom((value, { req }) => isUnique(value, 'email', User))
-      .escape(),
-    body('password').notEmpty().withMessage('Password is required').escape(),
-    body('password_confirmation')
-      .notEmpty()
-      .withMessage('Password Confirmation is required')
-      .escape()
-      .custom((value, { req }) => isSame(value, req.body.password, 'Password confirmation does not match password')),
-  ],
-};
+module.exports.register = () => [
+  body('firstName').notEmpty().withMessage('First Name is required').escape(),
+  body('lastName').notEmpty().withMessage('Last Name is required').escape(),
+  body('email')
+    .isEmail()
+    .withMessage('Enter a valid email')
+    .custom((value, { req }) => isUnique(value, 'email', User))
+    .escape(),
+  body('password').notEmpty().withMessage('Password is required').escape(),
+  body('password_confirmation')
+    .notEmpty()
+    .withMessage('Password Confirmation is required')
+    .escape()
+    .custom((value, { req }) => isSame(value, req.body.password, 'Password confirmation does not match password')),
+];
+
+module.exports.verifyEmail = () => [body('code').notEmpty().withMessage('Code is required')];

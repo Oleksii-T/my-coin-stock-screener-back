@@ -1,4 +1,4 @@
-const { authUser, jsonSuccess } = require('@r/utils/helpers');
+const { authUser, jsonSuccess, jsonError } = require('@r/utils/helpers');
 const UserResource = require('@r/resources/UserResource');
 
 exports.index = async (req, res) => {
